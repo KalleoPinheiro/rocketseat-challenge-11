@@ -69,7 +69,14 @@ const Dashboard: React.FC = () => {
         },
       });
 
-      setFoods([...data]);
+      setFoods(
+        data.map((food: Food) => {
+          return {
+            ...food,
+            formattedPrice: formatValue(food.price),
+          };
+        }),
+      );
     }
 
     loadFoods();
@@ -86,6 +93,10 @@ const Dashboard: React.FC = () => {
   }, []);
 
   function handleSelectCategory(id: number): void {
+    if (selectedCategory === id) {
+      setSelectedCategory(undefined);
+      return;
+    }
     setSelectedCategory(id);
   }
 

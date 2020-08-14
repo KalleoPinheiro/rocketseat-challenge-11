@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Image } from 'react-native';
 
+import { AxiosResponse } from 'axios';
 import api from '../../services/api';
 import formatValue from '../../utils/formatValue';
 
@@ -32,7 +33,18 @@ const Favorites: React.FC = () => {
 
   useEffect(() => {
     async function loadFavorites(): Promise<void> {
-      // Load favorite foods from api
+      const { data }: AxiosResponse = await api.get('favorites');
+
+      if (data?.length) {
+        setFavorites(
+          data.map((food: Food) => {
+            return {
+              ...food,
+              formattedPrice: formatValue(food.price),
+            };
+          }),
+        );
+      }
     }
 
     loadFavorites();
